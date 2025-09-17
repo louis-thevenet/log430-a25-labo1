@@ -27,8 +27,9 @@ class UserView:
                 user = User(None, name, email)
                 controller.create_user(user)
             elif choice == '3':
+                user_id = input("ID de l'utilisateur à modifier: ").strip()
                 name, email = UserView.get_inputs()
-                user = User(None, name, email)
+                user = User(user_id, name, email)
                 controller.update(user)
             elif choice == '4':
                 user_id = input("ID de l'utilisateur à supprimer: ").strip()

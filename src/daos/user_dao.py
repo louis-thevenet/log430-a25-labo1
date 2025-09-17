@@ -45,24 +45,9 @@ class UserDAO:
 
     def update(self, user):
         """ Update given user in MySQL """
-        # If name exist, update email
-        self.cursor.execute("SELECT 1 FROM users WHERE name=%s;",
-                            (user.name, ))
-        if self.cursor.fetchone():
-            self.cursor.execute("UPDATE users SET email=%s WHERE name=%s;",
-                                (user.email, user.name))
-            self.conn.commit()
-            return True
-
-        # If email exist, update name
-        self.cursor.execute("SELECT 1 FROM users WHERE email=%s;",
-                            (user.email, ))
-        if self.cursor.fetchone():
-            self.cursor.execute("UPDATE users SET name=%s WHERE email=%s;",
-                                (user.name, user.email))
-            self.conn.commit()
-            return True
-        return False
+        self.cursor.execute("UPDATE users SET email=%s,name=%s WHERE id=%s",
+                            (user.email, user.name, user.id))
+        self.conn.commit()
 
     def delete(self, user_id):
         """ Delete user from MySQL with given user ID """

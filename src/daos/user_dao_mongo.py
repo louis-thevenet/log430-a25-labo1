@@ -43,23 +43,16 @@ class UserDAOMongo:
 
     def update(self, user):
         """Update user in Mongo. """
-        # If name exists, update email
-        result = self.users.update_one({"name": user.name},
-                                       {"$set": {
-                                           "email": user.email
-                                       }})
-        if result.matched_count > 0:
-            return True
-
-        # If email exists, update name
-        result = self.users.update_one({"email": user.email},
-                                       {"$set": {
-                                           "name": user.name
-                                       }})
-        if result.matched_count > 0:
-            return True
-
-        return False
+        if type(user.id) is str:
+            id = ObjectId(user.id)
+        else:
+            id = user.id
+        result = self.users.update_one(
+            {"_id": id}, {"$set": {
+                "email": user.email,
+                "name": user.name,
+            }})
+        return result.matched_count > 0
 
     def delete(self, user_id):
         """ Delete user from Mongo with given user ID """
