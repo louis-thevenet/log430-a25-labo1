@@ -30,16 +30,16 @@ class UserDAOMongo:
         """ Select all users from Mongo"""
         users = []
         for user in self.users.find():
-            users.append(User(user["name"], user["email"], user["_id"]))
+            users.append(User(user["_id"], user["name"], user["email"]))
         return users
 
     def insert(self, user):
         """ Insert given user into Mongo"""
-        self.users.insert_one({
+        result = self.users.insert_one({
             "name": user.name,
             "email": user.email,
         })
-        return True
+        return result.inserted_id
 
     def update(self, user):
         """Update user in Mongo. """
@@ -56,7 +56,11 @@ class UserDAOMongo:
 
     def delete(self, user_id):
         """ Delete user from Mongo with given user ID """
-        result = self.users.delete_one({"_id": ObjectId(user_id)})
+        if type(user_id) is str:
+            id = ObjectId(user_id)
+        else:
+            id = user_id
+        result = self.users.delete_one({"_id": id})
         print(result.deleted_count)
         return result.deleted_count > 0
 
