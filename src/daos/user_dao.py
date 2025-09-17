@@ -45,6 +45,7 @@ class UserDAO:
 
     def update(self, user):
         """ Update given user in MySQL """
+        # If name exist, update email
         self.cursor.execute("SELECT 1 FROM users WHERE name=%s;",
                             (user.name, ))
         if self.cursor.fetchone():
@@ -53,7 +54,7 @@ class UserDAO:
             self.conn.commit()
             return True
 
-        # try update by email if name not found
+        # If email exist, update name
         self.cursor.execute("SELECT 1 FROM users WHERE email=%s;",
                             (user.email, ))
         if self.cursor.fetchone():
