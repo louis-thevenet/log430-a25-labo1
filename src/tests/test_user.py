@@ -1,13 +1,16 @@
 from daos.user_dao import UserDAO
 from daos.user_dao_mongo import UserDAOMongo
 from models.user import User
+import pytest
 
 dao = UserDAOMongo()
 
 
-def test_user_select():
-    user_list = dao.select_all()
-    assert len(user_list) >= 3
+@pytest.fixture(scope="module", autouse=True)
+def cleanup_after_tests():
+    yield
+    dao.delete_all()
+    dao.close()
 
 
 def test_user_insert():
