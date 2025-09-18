@@ -21,6 +21,8 @@
         {
           devShells.default = pkgs.mkShell {
             packages = with pkgs; [
+              typst
+              tinymist
               docker
               docker-compose
               (python3.withPackages (python-pkgs: [ python-pkgs.pytest ]))
